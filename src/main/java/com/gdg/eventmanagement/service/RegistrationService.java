@@ -49,6 +49,7 @@ public class RegistrationService {
                     "You are already registered for this event");
         }
 
+
         long registeredCount = registrationRepository.countByEventId(eventId);
 
         if (registeredCount >= event.getCapacity()) {
