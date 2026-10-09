@@ -1,10 +1,12 @@
 
 package com.gdg.eventmanagement.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+import java.time.LocalDateTime;
 
 @Entity
 public class Event {
@@ -13,21 +15,80 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Event title is required")
     private String title;
+
     private String description;
+
+    @NotNull(message = "Event date and time are required")
+    private LocalDateTime dateTime;
+
+    @NotBlank(message = "Event location is required")
     private String location;
-    private int capacity;
+
+    @NotNull(message = "Capacity is required")
+    @Min(value = 1, message = "Capacity must be at least 1")
+    private Integer capacity;
+
+    @NotBlank(message = "Event category is required")
+    private String category;
 
     public Event() {
     }
 
-    public Long getId() { return id; }
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
-    public String getLocation() { return location; }
-    public void setLocation(String location) { this.location = location; }
-    public int getCapacity() { return capacity; }
-    public void setCapacity(int capacity) { this.capacity = capacity; }
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public LocalDateTime getDateTime() {
+        return dateTime;
+    }
+
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public Integer getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(Integer capacity) {
+        this.capacity = capacity;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
 }

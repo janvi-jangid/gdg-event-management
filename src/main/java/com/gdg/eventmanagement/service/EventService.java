@@ -1,6 +1,7 @@
 
 package com.gdg.eventmanagement.service;
 
+import com.gdg.eventmanagement.EventNotFoundException;
 import com.gdg.eventmanagement.entity.Event;
 import com.gdg.eventmanagement.repository.EventRepository;
 import org.springframework.stereotype.Service;
@@ -22,4 +23,32 @@ public class EventService {
     public List<Event> getAllEvents() {
         return repository.findAll();
     }
+
+    public Event getEventById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new EventNotFoundException(id));
+    }
+
+    public Event updateEvent(Long id, Event updatedEvent) {
+        Event event = repository.findById(id)
+                .orElseThrow(() -> new EventNotFoundException(id));
+
+        event.setTitle(updatedEvent.getTitle());
+        event.setDescription(updatedEvent.getDescription());
+        event.setDateTime(updatedEvent.getDateTime());
+        event.setLocation(updatedEvent.getLocation());
+        event.setCapacity(updatedEvent.getCapacity());
+        event.setCategory(updatedEvent.getCategory());
+
+        return repository.save(event);
+    }
+
+    public void deleteEvent(Long id) {
+        Event event = repository.findById(id)
+                .orElseThrow(() -> new EventNotFoundException(id));
+
+        repository.delete(event);
+    }
+
+
 }
