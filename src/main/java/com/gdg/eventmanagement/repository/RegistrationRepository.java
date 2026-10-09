@@ -12,4 +12,6 @@ public interface RegistrationRepository
     boolean existsByUserIdAndEventId(Long userId, Long eventId);
 
     List<Registration> findByUserId(Long userId);
+    long countByEventId(Long eventId);
+    void deleteByUserIdAndEventId(Long userId, Long eventId);
 }

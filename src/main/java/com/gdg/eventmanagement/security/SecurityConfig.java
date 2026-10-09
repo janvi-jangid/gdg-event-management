@@ -27,11 +27,25 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(
                                 SessionCreationPolicy.STATELESS))
+
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/auth/register", "/api/auth/login").permitAll()
                         .requestMatchers(
-                                "/api/auth/register",
-                                "/api/auth/login"
-                        ).permitAll()
+                                org.springframework.http.HttpMethod.GET,
+                                "/api/events/**"
+                        ).authenticated()
+                        .requestMatchers(
+                                org.springframework.http.HttpMethod.POST,
+                                "/api/events/**"
+                        ).hasRole("ADMIN")
+                        .requestMatchers(
+                                org.springframework.http.HttpMethod.PUT,
+                                "/api/events/**"
+                        ).hasRole("ADMIN")
+                        .requestMatchers(
+                                org.springframework.http.HttpMethod.DELETE,
+                                "/api/events/**"
+                        ).hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(
