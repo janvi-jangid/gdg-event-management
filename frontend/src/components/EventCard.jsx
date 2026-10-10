@@ -1,7 +1,13 @@
 import "./EventCard.css";
 
 
-function EventCard({ event, onRegister }) {
+function EventCard({
+  event,
+  onRegister,
+  onCancelRegistration,
+  registrationStatus,
+  registering,
+}) {
   const eventDate = new Date(event.dateTime);
 const eventImages = {
   Pixtopia: "/Pixtopia.png",
@@ -47,11 +53,36 @@ const eventImages = {
           <span>Capacity: {event.capacity}</span>
         </div>
 
+        {registrationStatus?.registered && (
+          <p className="event-registration-status" role="status">
+            Registered
+          </p>
+        )}
+        {registrationStatus?.message && (
+          <p
+            className={`event-registration-message ${
+              /successful|cancelled/i.test(registrationStatus.message) ? "success" : ""
+            }`}
+            role="alert"
+          >
+            {registrationStatus.message}
+          </p>
+        )}
         <button
           className="event-register-button"
-          onClick={() => onRegister(event.id)}
+          disabled={registering || (!registrationStatus?.registered && registrationStatus?.closed)}
+          onClick={() => registrationStatus?.registered
+            ? onCancelRegistration(event.id)
+            : onRegister(event.id)}
         >
-          View event details <span>→</span>
+          {registering
+            ? "Please wait..."
+            : registrationStatus?.registered
+              ? "Cancel registration"
+              : registrationStatus?.closed
+                ? "Registration Closed"
+                : "Register Now"}
+          <span>→</span>
         </button>
       </div>
     </article>

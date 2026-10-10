@@ -221,6 +221,31 @@
   color: #003d9b;
 }
 
+.event-register-button:disabled {
+  color: #777;
+  cursor: not-allowed;
+}
+
+.event-registration-status,
+.event-registration-message {
+  margin: 0 0 10px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.event-registration-status {
+  color: #188038;
+  font-weight: 700;
+}
+
+.event-registration-message {
+  color: #b42318;
+}
+
+.event-registration-message.success {
+  color: #188038;
+}
+
 /* Responsive cards */
 @media (max-width: 600px) {
   .event-card-banner {

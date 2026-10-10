@@ -4,10 +4,17 @@ import Hero from "./components/Hero";
 import EventList from "./components/EventList";
 import PastEvents from "./components/PastEvents";
 import UpcomingEvent from "./components/UpcomingEvent";
+import {
+  cancelEventRegistration,
+  getMyRegistrations,
+  registerForEvent,
+} from "./services/auth";
 
 import "./App.css";
 
-const API_URL = "http://localhost:8080/api/events";
+const API_BASE_URL = (import.meta.env.VITE_API_URL || "http://localhost:8080")
+  .replace(/\/+$/, "");
+const API_URL = `${API_BASE_URL}/api/events`;
 
 const originalCards = [
   {
@@ -35,8 +42,12 @@ const originalCards = [
 
 function App() {
   const [events, setEvents] = useState([]);
+  const [featuredEvent, setFeaturedEvent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [registeredEventIds, setRegisteredEventIds] = useState(new Set());
+  const [registrationStatuses, setRegistrationStatuses] = useState({});
+  const [registeringEventIds, setRegisteringEventIds] = useState(new Set());
 
   useEffect(() => {
     async function fetchEvents() {
@@ -62,6 +73,37 @@ function App() {
           .filter(Boolean);
 
         setEvents(eventsWithImages);
+
+        const recruitmentMatches = data.filter(
+          (event) => event.title?.trim().toLowerCase() === "recruitment"
+        );
+        const recruitmentEvent = recruitmentMatches.length === 1
+          ? recruitmentMatches[0]
+          : null;
+        setFeaturedEvent(recruitmentEvent);
+        const eventsToCheck = recruitmentEvent
+          && !eventsWithImages.some((event) => event.id === recruitmentEvent.id)
+          ? [...eventsWithImages, recruitmentEvent]
+          : eventsWithImages;
+
+        const availability = await Promise.all(eventsToCheck.map(async (event) => {
+          try {
+            const statusResponse = await fetch(
+              `${API_BASE_URL}/api/events/${event.id}/availability`
+            );
+            if (!statusResponse.ok) return [event.id, null];
+            return [event.id, await statusResponse.json()];
+          } catch {
+            return [event.id, null];
+          }
+        }));
+        setRegistrationStatuses((current) => ({
+          ...current,
+          ...Object.fromEntries(availability.map(([id, status]) => [
+            id,
+            { ...current[id], closed: status?.closed ?? false },
+          ])),
+        }));
       } catch (err) {
         console.error("Error fetching events:", err);
         setError("Could not load events. Please check the backend.");
@@ -73,8 +115,117 @@ function App() {
     fetchEvents();
   }, []);
 
-  function handleRegister(eventId) {
-    alert(`Registration for event ${eventId} will be connected later.`);
+  async function refreshEventAvailability(eventId) {
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/api/events/${eventId}/availability`
+      );
+      if (!response.ok) return;
+      const availability = await response.json();
+      setRegistrationStatuses((current) => ({
+        ...current,
+        [eventId]: { ...current[eventId], closed: availability.closed },
+      }));
+    } catch {
+      // Registration requests still return the authoritative availability error.
+    }
+  }
+
+  useEffect(() => {
+    async function syncMyRegistrations() {
+      if (!localStorage.getItem("token")) {
+        setRegisteredEventIds(new Set());
+        return;
+      }
+
+      try {
+        const registrations = await getMyRegistrations();
+        setRegisteredEventIds(new Set(registrations.map((item) => item.eventId)));
+      } catch {
+        setRegisteredEventIds(new Set());
+      }
+    }
+
+    window.addEventListener("authchange", syncMyRegistrations);
+    syncMyRegistrations();
+    return () => window.removeEventListener("authchange", syncMyRegistrations);
+  }, []);
+
+  async function handleRegister(eventId) {
+    if (!localStorage.getItem("token")) {
+      setRegistrationStatuses((current) => ({
+        ...current,
+        [eventId]: { ...current[eventId], message: "Log in to register for this event." },
+      }));
+      window.dispatchEvent(new Event("open-auth"));
+      return;
+    }
+
+    setRegisteringEventIds((current) => new Set(current).add(eventId));
+    setRegistrationStatuses((current) => ({
+      ...current,
+      [eventId]: { ...current[eventId], message: "" },
+    }));
+
+    try {
+      await registerForEvent(eventId);
+      setRegisteredEventIds((current) => new Set(current).add(eventId));
+      setRegistrationStatuses((current) => ({
+        ...current,
+        [eventId]: { ...current[eventId], message: "Registration successful." },
+      }));
+      await refreshEventAvailability(eventId);
+    } catch (registrationError) {
+      setRegistrationStatuses((current) => ({
+        ...current,
+        [eventId]: { ...current[eventId], message: registrationError.message },
+      }));
+      if (/capacity|full|closed|past|cancel/i.test(registrationError.message)) {
+        setRegistrationStatuses((current) => ({
+          ...current,
+          [eventId]: { ...current[eventId], closed: true },
+        }));
+      }
+    } finally {
+      setRegisteringEventIds((current) => {
+        const next = new Set(current);
+        next.delete(eventId);
+        return next;
+      });
+    }
+  }
+
+  async function handleCancelRegistration(eventId) {
+    setRegisteringEventIds((current) => new Set(current).add(eventId));
+    setRegistrationStatuses((current) => ({
+      ...current,
+      [eventId]: { ...current[eventId], message: "" },
+    }));
+
+    try {
+      await cancelEventRegistration(eventId);
+      setRegisteredEventIds((current) => {
+        const next = new Set(current);
+        next.delete(eventId);
+        return next;
+      });
+      setRegistrationStatuses((current) => ({
+        ...current,
+        [eventId]: { ...current[eventId], message: "Registration cancelled." },
+      }));
+      await refreshEventAvailability(eventId);
+    } catch (registrationError) {
+      setRegistrationStatuses((current) => ({
+        ...current,
+        [eventId]: { ...current[eventId], message: registrationError.message },
+      }));
+    } finally {
+      setRegisteringEventIds((current) => {
+        const next = new Set(current);
+        next.delete(eventId);
+        return next;
+      });
+    }
   }
 
   return (
@@ -85,11 +236,25 @@ function App() {
       
 {loading && <p>Loading events...</p>}
 {error && <p>{error}</p>}
-{!loading && !error && (
-  <EventList events={events} onRegister={handleRegister} />
+{!loading && (
+  <EventList
+    events={events}
+    onRegister={handleRegister}
+    onCancelRegistration={handleCancelRegistration}
+    registeredEventIds={registeredEventIds}
+    registrationStatuses={registrationStatuses}
+    registeringEventIds={registeringEventIds}
+  />
 )}
 <PastEvents />
-<UpcomingEvent />
+<UpcomingEvent
+  event={featuredEvent}
+  registrationStatus={featuredEvent ? registrationStatuses[featuredEvent.id] : null}
+  registered={featuredEvent ? registeredEventIds.has(featuredEvent.id) : false}
+  registering={featuredEvent ? registeringEventIds.has(featuredEvent.id) : false}
+  onRegister={handleRegister}
+  onCancelRegistration={handleCancelRegistration}
+/>
 
     </>
   );

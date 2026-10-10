@@ -1,4 +1,6 @@
-const API_URL = "http://localhost:8080/api/auth";
+const API_BASE_URL = (import.meta.env.VITE_API_URL || "http://localhost:8080")
+  .replace(/\/+$/, "");
+const API_URL = `${API_BASE_URL}/api/auth`;
 
 export async function registerUser(name, email, password) {
   const response = await fetch(`${API_URL}/register`, {
@@ -59,6 +61,7 @@ if (text) {
 
   localStorage.setItem("token", data.token);
   localStorage.setItem("userEmail", data.email);
+  window.dispatchEvent(new Event("authchange"));
 
   return data;
 }
@@ -66,6 +69,7 @@ if (text) {
 export function logoutUser() {
   localStorage.removeItem("token");
   localStorage.removeItem("userEmail");
+  window.dispatchEvent(new Event("authchange"));
 }
 
 
@@ -99,4 +103,22 @@ export async function authenticatedRequest(url, options = {}) {
   }
 
   return data;
+}
+
+export async function registerForEvent(eventId) {
+  return authenticatedRequest(
+    `${API_BASE_URL}/api/registrations/${eventId}`,
+    { method: "POST", body: "{}" }
+  );
+}
+
+export async function cancelEventRegistration(eventId) {
+  return authenticatedRequest(
+    `${API_BASE_URL}/api/registrations/${eventId}`,
+    { method: "DELETE" }
+  );
+}
+
+export async function getMyRegistrations() {
+  return authenticatedRequest(`${API_BASE_URL}/api/registrations/me`);
 }

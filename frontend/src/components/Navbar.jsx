@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   loginUser,
   registerUser,
@@ -18,6 +18,25 @@ function Navbar() {
   const [loggedIn, setLoggedIn] = useState(
     Boolean(localStorage.getItem("token"))
   );
+
+  useEffect(() => {
+    function handleAuthChange() {
+      setLoggedIn(Boolean(localStorage.getItem("token")));
+    }
+
+    function handleOpenAuth() {
+      setIsSignup(false);
+      setMessage("");
+      setShowAuth(true);
+    }
+
+    window.addEventListener("authchange", handleAuthChange);
+    window.addEventListener("open-auth", handleOpenAuth);
+    return () => {
+      window.removeEventListener("authchange", handleAuthChange);
+      window.removeEventListener("open-auth", handleOpenAuth);
+    };
+  }, []);
 
   async function handleSubmit(e) {
     e.preventDefault();

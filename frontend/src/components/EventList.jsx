@@ -2,7 +2,14 @@ import { useState } from "react";
 import EventCard from "./EventCard";
 import "./EventList.css";
 
-function EventList({ events, onRegister }) {
+function EventList({
+  events,
+  onRegister,
+  onCancelRegistration,
+  registeredEventIds,
+  registrationStatuses,
+  registeringEventIds,
+}) {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All events");
 
@@ -67,6 +74,12 @@ function EventList({ events, onRegister }) {
             key={event.id}
             event={event}
             onRegister={onRegister}
+            onCancelRegistration={onCancelRegistration}
+            registrationStatus={{
+              ...registrationStatuses[event.id],
+              registered: registeredEventIds.has(event.id),
+            }}
+            registering={registeringEventIds.has(event.id)}
           />
         ))}
       </div>
