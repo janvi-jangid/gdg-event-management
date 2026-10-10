@@ -4,6 +4,7 @@ import Hero from "./components/Hero";
 import EventList from "./components/EventList";
 import PastEvents from "./components/PastEvents";
 import UpcomingEvent from "./components/UpcomingEvent";
+
 import "./App.css";
 
 const API_URL = "http://localhost:8080/api/events";
