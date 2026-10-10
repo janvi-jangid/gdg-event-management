@@ -82,15 +82,15 @@ function App() {
       <Navbar />
       <Hero />
 
-      {loading ? (
-        <p>Loading events...</p>
-      ) : error ? (
-        <p>{error}</p>
-      ) : (
-        <EventList events={events} onRegister={handleRegister} />
-      )}
+      
+{loading && <p>Loading events...</p>}
+{error && <p>{error}</p>}
+{!loading && !error && (
+  <EventList events={events} onRegister={handleRegister} />
+)}
 <PastEvents />
 <UpcomingEvent />
+
     </>
   );
 }
