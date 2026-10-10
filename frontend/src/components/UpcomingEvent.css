@@ -10,20 +10,16 @@
   padding: 40px 5%;
   box-sizing: border-box;
 
-  background-color: #fff;
-  background-image:
-    linear-gradient(to right, #eaeaea 1px, transparent 1px),
-    linear-gradient(to bottom, #eaeaea 1px, transparent 1px);
-  background-size: 45px 45px;
+  background: transparent;
 }
 
 /* RECRUITMENT CARD */
 .featured-event {
   min-width: 0;
   overflow: hidden;
-  border: 3px solid #000;
+  border: 3px solid #111111;
   border-radius: 25px;
-  background: #fff;
+  background: #131313;
   box-shadow: 8px 8px 0 #000;
 }
 
@@ -45,7 +41,7 @@
       rgba(0, 0, 0, 0.05) 80%
     ),
     url("/recruitment.png") center / cover no-repeat,
-    linear-gradient(135deg, #b9c6d4, #172c55, #080808);
+    linear-gradient(135deg, #5c93cd, #ebeef0, #c778df);
 }
 
 .featured-status {
@@ -55,15 +51,15 @@
   padding: 8px 16px;
   border: 2px solid #000;
   border-radius: 25px;
-  background: #fff;
-  color: #000;
+  background: #e7e5e5;
+  color: #181717;
   font-size: 11px;
   font-weight: 800;
 }
 
 .featured-event-content {
   padding: 25px 0 65px;
-  color: #fff;
+  color: #f9f6f6;
 }
 
 .featured-event-content h2 {
@@ -75,7 +71,7 @@
 .featured-event-content p {
   max-width: 800px;
   margin: 0;
-  color: #f1f1f1;
+  color: #f8f4f4;
   font-size: 15px;
   line-height: 1.8;
 }
@@ -88,10 +84,10 @@
   place-items: center;
   width: 60px;
   height: 60px;
-  border: 3px solid #000;
+  border: 3px solid #131212;
   border-radius: 50%;
   background: #ffc20e;
-  color: #000;
+  color: #111111;
   font-size: 25px;
   cursor: pointer;
   transition: transform 0.2s ease;
@@ -113,8 +109,8 @@
   border: 3px solid #000;
   border-radius: 25px;
   background: #ffc20e;
-  box-shadow: 8px 8px 0 #000;
-  color: #000;
+  box-shadow: 8px 8px 0 #0f0f0f;
+  color: #080808;
 }
 
 .new-event-panel h2 {
@@ -156,14 +152,14 @@
   border: 2px solid #000;
   border-radius: 28px;
   background: #000;
-  color: #fff;
+  color: #fcfafa;
   font-size: 15px;
   font-weight: 800;
   cursor: pointer;
 }
 
 .new-event-register:hover {
-  background: #fff;
+  background: #f9f7f7;
   color: #000;
 }
 
@@ -220,3 +216,4 @@
     padding: 30px 24px;
   }
 }
+

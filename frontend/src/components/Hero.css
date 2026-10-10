@@ -1,11 +1,6 @@
-.events-hero {
-  padding: 50px 8% 40px;
-  background-color: #ffffff;
-  background-image:
-    linear-gradient(to right, #eaeaea 1px, transparent 1px),
-    linear-gradient(to bottom, #eaeaea 1px, transparent 1px);
-  background-size: 35px 35px;
-  background-position: 10 ;
+.events-body {
+  margin: 0;
+  background: #ffffff;
 }
 
 .events-hero-content {

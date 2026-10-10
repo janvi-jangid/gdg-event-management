@@ -191,3 +191,10 @@
     min-height: 165px;
   }
 }
+
+.past-events-section {
+  position: relative;
+  display: block;
+  opacity: 1;
+  visibility: visible;
+}

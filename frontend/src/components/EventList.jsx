@@ -28,10 +28,8 @@ function EventList({ events, onRegister }) {
     <section id="events" className="events-section">
       <div className="events-heading">
         <div>
-          <p className="events-eyebrow">EXPLORE OUR COMMUNITY</p>
           <h2>Upcoming Events</h2>
           <p className="events-intro">
-            Find your next opportunity to learn, create, and connect.
           </p>
         </div>
       </div>

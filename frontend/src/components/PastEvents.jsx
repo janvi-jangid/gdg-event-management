@@ -36,7 +36,6 @@ function PastEvents() {
     <section className="past-events-section" id="past-events">
       <div className="past-events-heading">
         <div>
-          <p className="past-events-eyebrow">OUR COMMUNITY ARCHIVE</p>
           <h2>Past Events</h2>
         </div>
       </div>
