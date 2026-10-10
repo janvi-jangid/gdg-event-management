@@ -45,4 +45,20 @@ public class EventController {
         service.deleteEvent(id);
         return "Event deleted successfully";
     }
+
+
+
+    @GetMapping("/search")
+    public List<Event> searchEvents(
+            @RequestParam String title) {
+        return service.searchEvents(title);
+    }
+
+    @GetMapping("/category")
+    public List<Event> filterByCategory(
+            @RequestParam String category) {
+        return service.filterByCategory(category);
+    }
+
+
 }

@@ -3,6 +3,8 @@ package com.gdg.eventmanagement.controller;
 
 import com.gdg.eventmanagement.entity.Registration;
 import com.gdg.eventmanagement.service.RegistrationService;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -14,7 +16,8 @@ public class RegistrationController {
 
     private final RegistrationService registrationService;
 
-    public RegistrationController(RegistrationService registrationService) {
+    public RegistrationController(
+            RegistrationService registrationService) {
         this.registrationService = registrationService;
     }
 
@@ -26,11 +29,41 @@ public class RegistrationController {
     ) {}
 
     @PostMapping("/{eventId}")
+    @ResponseStatus(HttpStatus.CREATED)
     public RegistrationResponse registerForEvent(
-            @PathVariable Long eventId) {
+            @PathVariable Long eventId,
+            Authentication authentication) {
 
         Registration registration =
-                registrationService.registerForEvent(eventId);
+                registrationService.register(
+                        authentication.getName(), eventId);
+
+        return toResponse(registration);
+    }
+
+    @GetMapping("/me")
+    public List<RegistrationResponse> getMyRegistrations(
+            Authentication authentication) {
+
+        return registrationService
+                .getMyRegistrations(authentication.getName())
+                .stream()
+                .map(this::toResponse)
+                .toList();
+    }
+
+    @DeleteMapping("/{eventId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void unregisterFromEvent(
+            @PathVariable Long eventId,
+            Authentication authentication) {
+
+        registrationService.unregister(
+                authentication.getName(), eventId);
+    }
+
+    private RegistrationResponse toResponse(
+            Registration registration) {
 
         return new RegistrationResponse(
                 registration.getId(),
@@ -39,32 +72,4 @@ public class RegistrationController {
                 registration.getRegisteredAt()
         );
     }
-
-    @GetMapping("/me")
-    public List<RegistrationResponse> getMyRegistrations() {
-        return registrationService.getMyRegistrations()
-                .stream()
-                .map(registration -> new RegistrationResponse(
-                        registration.getId(),
-                        registration.getEvent().getId(),
-                        registration.getEvent().getTitle(),
-                        registration.getRegisteredAt()
-                ))
-                .toList();
-    }
-
-
-
-    @DeleteMapping("/{eventId}")
-    public org.springframework.http.ResponseEntity<Void> unregisterFromEvent(
-            @PathVariable Long eventId) {
-
-        registrationService.unregisterFromEvent(eventId);
-
-        return org.springframework.http.ResponseEntity.noContent().build();
-    }
-
-
-
-
 }

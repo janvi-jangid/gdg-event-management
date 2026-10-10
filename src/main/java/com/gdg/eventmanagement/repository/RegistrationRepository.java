@@ -1,6 +1,6 @@
 
 package com.gdg.eventmanagement.repository;
-
+import java.util.Optional;
 import com.gdg.eventmanagement.entity.Registration;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -14,4 +14,6 @@ public interface RegistrationRepository
     List<Registration> findByUserId(Long userId);
     long countByEventId(Long eventId);
     void deleteByUserIdAndEventId(Long userId, Long eventId);
+    Optional<Registration> findByUserIdAndEventId(
+            Long userId, Long eventId);
 }

@@ -7,7 +7,6 @@ import com.gdg.eventmanagement.entity.Registration;
 import com.gdg.eventmanagement.repository.AppUserRepository;
 import com.gdg.eventmanagement.repository.EventRepository;
 import com.gdg.eventmanagement.repository.RegistrationRepository;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,9 +30,7 @@ public class RegistrationService {
     }
 
     @Transactional
-    public Registration registerForEvent(Long eventId) {
-        String email = SecurityContextHolder.getContext()
-                .getAuthentication().getName();
+    public Registration register(String email, Long eventId) {
 
         AppUser user = userRepository.findByEmail(email)
                 .orElseThrow(() ->
@@ -49,8 +46,8 @@ public class RegistrationService {
                     "You are already registered for this event");
         }
 
-
-        long registeredCount = registrationRepository.countByEventId(eventId);
+        long registeredCount =
+                registrationRepository.countByEventId(eventId);
 
         if (registeredCount >= event.getCapacity()) {
             throw new IllegalArgumentException(
@@ -65,9 +62,7 @@ public class RegistrationService {
         return registrationRepository.save(registration);
     }
 
-    public List<Registration> getMyRegistrations() {
-        String email = SecurityContextHolder.getContext()
-                .getAuthentication().getName();
+    public List<Registration> getMyRegistrations(String email) {
 
         AppUser user = userRepository.findByEmail(email)
                 .orElseThrow(() ->
@@ -76,23 +71,19 @@ public class RegistrationService {
         return registrationRepository.findByUserId(user.getId());
     }
 
-
     @Transactional
-    public void unregisterFromEvent(Long eventId) {
-        String email = SecurityContextHolder.getContext()
-                .getAuthentication().getName();
+    public void unregister(String email, Long eventId) {
 
         AppUser user = userRepository.findByEmail(email)
                 .orElseThrow(() ->
                         new IllegalArgumentException("User not found"));
 
-        if (!registrationRepository.existsByUserIdAndEventId(
-                user.getId(), eventId)) {
-            throw new IllegalArgumentException(
-                    "You are not registered for this event");
-        }
+        Registration registration = registrationRepository
+                .findByUserIdAndEventId(user.getId(), eventId)
+                .orElseThrow(() ->
+                        new IllegalArgumentException(
+                                "You are not registered for this event"));
 
-        registrationRepository.deleteByUserIdAndEventId(
-                user.getId(), eventId);
+        registrationRepository.delete(registration);
     }
 }

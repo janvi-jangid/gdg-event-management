@@ -5,6 +5,7 @@ import com.gdg.eventmanagement.EventNotFoundException;
 import com.gdg.eventmanagement.entity.Event;
 import com.gdg.eventmanagement.repository.EventRepository;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
@@ -50,5 +51,11 @@ public class EventService {
         repository.delete(event);
     }
 
+    public List<Event> searchEvents(String title) {
+        return repository.findByTitleContainingIgnoreCase(title);
+    }
 
+    public List<Event> filterByCategory(String category) {
+        return repository.findByCategoryIgnoreCase(category);
+    }
 }

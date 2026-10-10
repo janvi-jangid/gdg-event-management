@@ -3,13 +3,12 @@ package com.gdg.eventmanagement.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-@EnableMethodSecurity
 @Configuration
 public class SecurityConfig {
 
@@ -21,33 +20,41 @@ public class SecurityConfig {
     }
 
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http)
-            throws Exception {
+    public SecurityFilterChain securityFilterChain(
+            HttpSecurity http) throws Exception {
 
         http
                 .csrf(csrf -> csrf.disable())
+                .formLogin(form -> form.disable())
+                .httpBasic(basic -> basic.disable())
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(
-                                SessionCreationPolicy.STATELESS))
-
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/register", "/api/auth/login").permitAll()
+
+                        // Public endpoints
                         .requestMatchers(
-                                org.springframework.http.HttpMethod.GET,
-                                "/api/events/**"
-                        ).authenticated()
+                                "/api/auth/**",
+                                "/api/health"
+                        ).permitAll()
+
+                        // Anyone can browse events
+                        .requestMatchers(HttpMethod.GET, "/api/events/**")
+                        .permitAll()
+
+                        // Only admins can modify events
                         .requestMatchers(
-                                org.springframework.http.HttpMethod.POST,
-                                "/api/events/**"
-                        ).hasRole("ADMIN")
+                                HttpMethod.POST, "/api/events/**")
+                        .hasRole("ADMIN")
+
                         .requestMatchers(
-                                org.springframework.http.HttpMethod.PUT,
-                                "/api/events/**"
-                        ).hasRole("ADMIN")
+                                HttpMethod.PUT, "/api/events/**")
+                        .hasRole("ADMIN")
+
                         .requestMatchers(
-                                org.springframework.http.HttpMethod.DELETE,
-                                "/api/events/**"
-                        ).hasRole("ADMIN")
+                                HttpMethod.DELETE, "/api/events/**")
+                        .hasRole("ADMIN")
+
+                        // All other endpoints require login
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(
