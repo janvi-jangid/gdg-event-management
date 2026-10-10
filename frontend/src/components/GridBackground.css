@@ -1,0 +1,23 @@
+
+/* Whole website background grid */
+html {
+  min-height: 100%;
+  background: #ffffff;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  background-color: #ffffff;
+  background-image:
+    linear-gradient(to right, #e5e5e5 1px, transparent 1px),
+    linear-gradient(to bottom, #e5e5e5 1px, transparent 1px);
+  background-size: 36px 36px;
+  background-position: 0 0;
+}
+
+#root {
+  min-height: 100vh;
+  background: transparent;
+}
+

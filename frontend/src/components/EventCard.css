@@ -1,0 +1,297 @@
+.event-card {
+  overflow: hidden;
+  border: 1px solid #e8eaed;
+  border-radius: 14px;
+  background: #ffffff;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.event-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 28px #20212412;
+}
+
+.event-card-banner {
+  min-height: 155px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 22px;
+  background: #e8f0fe;
+}
+
+.banner-technology {
+  background: #e8f0fe;
+}
+
+.banner-competition {
+  background: #fce8e6;
+}
+
+.banner-career {
+  background: #e6f4ea;
+}
+
+.event-card-symbol {
+  color: #202124;
+  font-size: 58px;
+  font-weight: 300;
+}
+
+.event-card-category {
+  padding: 7px 11px;
+  border: 1px solid #ffffffa8;
+  border-radius: 20px;
+  background: #ffffffc9;
+  color: #3c4043;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.event-card-content {
+  padding: 22px;
+}
+
+.event-card-date {
+  margin: 0 0 12px;
+  color: #5f6368;
+  font-size: 12px;
+}
+
+.event-card h3 {
+  margin: 0 0 12px;
+  color: #202124;
+  font-size: 20px;
+  line-height: 1.4;
+}
+
+.event-description {
+  min-height: 48px;
+  color: #5f6368;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.event-details {
+  display: grid;
+  gap: 10px;
+  margin: 20px 0;
+  color: #5f6368;
+  font-size: 12px;
+}
+
+.event-register-button {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 13px 0 0;
+  border: none;
+  border-top: 1px solid #e8eaed;
+  background: transparent;
+  color: #1967d2;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+
+.event-register-button:hover {
+  color: #174ea6;
+}
+
+.event-register-button span {
+  font-size: 20px;
+}
+
+/* UPCOMING CARDS — MATCH PAST EVENT DESIGN */
+
+.event-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  height: 100%;
+  overflow: hidden;
+  border: 3px solid #171717;
+  border-radius: 23px;
+  background: #fff;
+  box-shadow: 7px 7px 0 #111;
+  box-sizing: border-box;
+}
+
+/* Gray banner */
+.event-card-banner {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  min-height: 235px;
+  padding: 22px;
+  box-sizing: border-box;
+  border-bottom: 3px solid #171717;
+  border-radius: 19px 19px 0 0;
+  background: linear-gradient(135deg, #dedede, #cecece);
+}
+
+/* Keep the symbol, but position it like a graphic */
+.event-card-symbol {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  color: #222;
+  font-size: 64px;
+  transform: translate(-50%, -50%);
+}
+
+/* Remove the category pill */
+.event-card-category {
+  display: none !important;
+}
+
+/* White content area */
+.event-card-content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 22px 20px 18px;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+/* Event date */
+.event-card-date {
+  margin: 0 0 18px;
+  color: #555;
+  font-family: Georgia, serif;
+  font-size: 13px;
+}
+
+/* Event title */
+.event-card-content h3 {
+  margin: 0 0 14px;
+  color: #171717;
+  font-family: Georgia, serif;
+  font-size: 23px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+/* Description */
+.event-description {
+  margin: 0 0 24px;
+  color: #5d5d5d;
+  font-family: Georgia, serif;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+/* Location and capacity */
+.event-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: auto;
+  margin-bottom: 20px;
+  color: #5d5d5d;
+  font-family: Georgia, serif;
+  font-size: 13px;
+}
+
+/* Bottom action */
+.event-register-button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 15px 0 3px;
+  border: none;
+  border-top: 1px solid #dedede;
+  background: #fff;
+  color: #0866e8;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.event-register-button span {
+  font-size: 23px;
+}
+
+.event-register-button:hover {
+  color: #003d9b;
+}
+
+/* Responsive cards */
+@media (max-width: 600px) {
+  .event-card-banner {
+    min-height: 200px;
+  }
+
+  .event-card-content h3 {
+    font-size: 21px;
+  }
+}
+
+.event-card-banner {
+  min-height: 200px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.event-card-banner {
+  height: 200px;
+  position: relative;
+  overflow: hidden;
+}
+
+.event-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.event-card-status {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 1;
+}
+
+.event-card-banner img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+.event-card-banner {
+  height: 200px;
+  min-height: 200px;
+  padding: 0;
+  overflow: hidden;
+}
+
+.event-card-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.event-card-banner {
+  position: relative;
+  height: 263px;
+  min-height: 263px;
+  padding: 0;
+  overflow: hidden;
+  background: #ddd;
+}
+
+.event-card-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

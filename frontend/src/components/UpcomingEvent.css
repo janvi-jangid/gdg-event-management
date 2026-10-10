@@ -1,0 +1,222 @@
+
+/* UPCOMING EVENT SECTION */
+.upcoming-layout {
+  display: grid;
+  grid-template-columns: 1.8fr 0.95fr;
+  gap: 22px;
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 40px 5%;
+  box-sizing: border-box;
+
+  background-color: #fff;
+  background-image:
+    linear-gradient(to right, #eaeaea 1px, transparent 1px),
+    linear-gradient(to bottom, #eaeaea 1px, transparent 1px);
+  background-size: 45px 45px;
+}
+
+/* RECRUITMENT CARD */
+.featured-event {
+  min-width: 0;
+  overflow: hidden;
+  border: 3px solid #000;
+  border-radius: 25px;
+  background: #fff;
+  box-shadow: 8px 8px 0 #000;
+}
+
+.featured-event-image {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 555px;
+  overflow: hidden;
+  padding: 25px 35px;
+  box-sizing: border-box;
+  border-radius: 21px;
+
+  background:
+    linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.88) 0%,
+      rgba(0, 0, 0, 0.05) 80%
+    ),
+    url("/recruitment.png") center / cover no-repeat,
+    linear-gradient(135deg, #b9c6d4, #172c55, #080808);
+}
+
+.featured-status {
+  position: absolute;
+  top: 38px;
+  left: 38px;
+  padding: 8px 16px;
+  border: 2px solid #000;
+  border-radius: 25px;
+  background: #fff;
+  color: #000;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.featured-event-content {
+  padding: 25px 0 65px;
+  color: #fff;
+}
+
+.featured-event-content h2 {
+  margin: 0 0 12px;
+  font-size: 36px;
+  font-weight: 900;
+}
+
+.featured-event-content p {
+  max-width: 800px;
+  margin: 0;
+  color: #f1f1f1;
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+.featured-arrow {
+  position: absolute;
+  bottom: 28px;
+  left: 35px;
+  display: grid;
+  place-items: center;
+  width: 60px;
+  height: 60px;
+  border: 3px solid #000;
+  border-radius: 50%;
+  background: #ffc20e;
+  color: #000;
+  font-size: 25px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.featured-arrow:hover {
+  transform: rotate(45deg);
+}
+
+/* YELLOW NEW EVENT PANEL */
+.new-event-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 0;
+  min-height: 555px;
+  padding: 50px 35px 30px;
+  box-sizing: border-box;
+  border: 3px solid #000;
+  border-radius: 25px;
+  background: #ffc20e;
+  box-shadow: 8px 8px 0 #000;
+  color: #000;
+}
+
+.new-event-panel h2 {
+  margin: 0;
+  font-size: clamp(38px, 4vw, 55px);
+  font-weight: 900;
+  letter-spacing: -2px;
+  line-height: 0.98;
+}
+
+.new-event-divider {
+  width: 100%;
+  margin: 24px 0;
+  border-top: 1px dashed #a27c00;
+}
+
+.new-event-date {
+  display: grid;
+  gap: 7px;
+  margin-top: auto;
+  margin-bottom: 30px;
+}
+
+.new-event-date span {
+  margin-bottom: 7px;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+
+.new-event-date strong {
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.new-event-register {
+  width: 100%;
+  padding: 14px 18px;
+  border: 2px solid #000;
+  border-radius: 28px;
+  background: #000;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.new-event-register:hover {
+  background: #fff;
+  color: #000;
+}
+
+/* TABLET */
+@media (max-width: 900px) {
+  .upcoming-layout {
+    grid-template-columns: 1fr;
+    padding: 30px 5%;
+  }
+
+  .featured-event-image {
+    min-height: 450px;
+  }
+
+  .new-event-panel {
+    min-height: 380px;
+  }
+}
+
+/* MOBILE */
+@media (max-width: 600px) {
+  .upcoming-layout {
+    gap: 20px;
+    padding: 25px 5%;
+  }
+
+  .featured-event-image {
+    min-height: 420px;
+    padding: 22px;
+  }
+
+  .featured-status {
+    top: 20px;
+    left: 20px;
+  }
+
+  .featured-event-content h2 {
+    font-size: 28px;
+  }
+
+  .featured-event-content p {
+    font-size: 13px;
+  }
+
+  .featured-arrow {
+    left: 22px;
+    bottom: 22px;
+    width: 48px;
+    height: 48px;
+  }
+
+  .new-event-panel {
+    min-height: 360px;
+    padding: 30px 24px;
+  }
+}

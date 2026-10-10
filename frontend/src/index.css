@@ -1,0 +1,28 @@
+/* Reset default browser spacing */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+  background-color: #ffffff;
+}
+
+body {
+  margin: 0;
+  background-color: #ffffff;
+  background-image:
+    linear-gradient(to right, #eaeaea 1px, transparent 1px),
+    linear-gradient(to bottom, #eaeaea 1px, transparent 1px);
+  background-size: 36px 36px;
+  background-attachment: fixed;
+}
+
+
+#root {
+  min-height: 100vh;
+  background: transparent;
+}
+
