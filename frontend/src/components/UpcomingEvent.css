@@ -1,5 +1,6 @@
 
 /* UPCOMING EVENT SECTION */
+
 .upcoming-layout {
   display: grid;
   grid-template-columns: 1.8fr 0.95fr;
@@ -9,9 +10,10 @@
   margin: 0 auto;
   padding: 40px 5%;
   box-sizing: border-box;
-
-  background: transparent;
+  background: transparent !important;
+  background-image: none !important;
 }
+
 
 /* RECRUITMENT CARD */
 .featured-event {
@@ -40,7 +42,7 @@
       rgba(0, 0, 0, 0.88) 0%,
       rgba(0, 0, 0, 0.05) 80%
     ),
-    url("/recruitment.png") center / cover no-repeat,
+    url("/Recruitment-img.png") center / cover no-repeat,
     linear-gradient(135deg, #5c93cd, #ebeef0, #c778df);
 }
 

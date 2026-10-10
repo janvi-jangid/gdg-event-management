@@ -41,7 +41,7 @@ function UpcomingEvent() {
 
         <button
           className="new-event-register"
-          onClick={() => alert("Registration will be connected next.")}
+          onClick={() => alert("Registration will be connected soon!")}
         >
           Register Now
         </button>
