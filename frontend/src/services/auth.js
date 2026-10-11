@@ -1,8 +1,17 @@
-const API_BASE_URL = (import.meta.env.VITE_API_URL || "http://localhost:8080")
-  .replace(/\/+$/, "");
-const API_URL = `${API_BASE_URL}/api/auth`;
+const API_BASE_URL = (
+  import.meta.env.VITE_API_URL ||
+  (import.meta.env.DEV ? "http://localhost:8080" : "")
+).replace(/\/+$/, "");
+const API_URL = API_BASE_URL ? `${API_BASE_URL}/api/auth` : "";
+
+function requireApiBaseUrl() {
+  if (!API_BASE_URL) {
+    throw new Error("The backend API URL is not configured for this deployment.");
+  }
+}
 
 export async function registerUser(name, email, password) {
+  requireApiBaseUrl();
   const response = await fetch(`${API_URL}/register`, {
     method: "POST",
     headers: {
@@ -33,6 +42,7 @@ if (text) {
 }
 
 export async function loginUser(email, password) {
+  requireApiBaseUrl();
   const response = await fetch(`${API_URL}/login`, {
     method: "POST",
     headers: {
@@ -74,6 +84,7 @@ export function logoutUser() {
 
 
 export async function authenticatedRequest(url, options = {}) {
+  requireApiBaseUrl();
   const token = localStorage.getItem("token");
 
   const response = await fetch(url, {
@@ -97,9 +108,13 @@ export async function authenticatedRequest(url, options = {}) {
   }
 
   if (!response.ok) {
-    throw new Error(
-      data?.message || data?.error || `Request failed: ${response.status}`
+    const error = new Error(
+      response.status === 401
+        ? "Your session has expired. Please log in and try again."
+        : data?.message || data?.error || `Request failed: ${response.status}`
     );
+    error.status = response.status;
+    throw error;
   }
 
   return data;

@@ -58,6 +58,21 @@ function EventList({
   const usingFallback = actualEvents.length === 0 && !loading;
 
   const availableEvents = usingFallback ? fallbackEvents : actualEvents;
+  const displayedFeaturedEvent =
+  featuredEvent ||
+  (usingFallback
+    ? {
+        id: "preview-recruitment",
+        title: "Recruitment",
+        category: "Recruitment",
+        description:
+          "Join GDG RBU and become part of our developer community.",
+        dateTime: null,
+        location: "RBU Campus",
+        capacity: 100,
+        demo: true,
+      }
+    : null);
 
   const categories = [
     "All events",
@@ -144,7 +159,7 @@ function EventList({
             <div className="event-grid">
               {filteredEvents.map((event) => {
                 const isFeatured =
-                  String(event.id) === String(featuredEvent?.id);
+                 String(event.id) === String(displayedFeaturedEvent?.id);
                 const Card = isFeatured ? UpcomingEvent : EventCard;
                 const isDemo = Boolean(event.demo);
 

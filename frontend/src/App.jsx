@@ -3,6 +3,7 @@ import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import EventList from "./components/EventList";
 import PastEvents from "./components/PastEvents";
+import RecruitmentSection from "./components/RecruitmentSection";
 import {
   cancelEventRegistration,
   getMyRegistrations,
@@ -10,6 +11,7 @@ import {
 } from "./services/auth";
 
 import "./App.css";
+import UpcomingEvent from "./components/UpcomingEvent";
 
 const API_BASE_URL = (
   import.meta.env.VITE_API_URL ||
@@ -270,25 +272,26 @@ function App() {
   }
 
   return (
-    <>
-      <Navbar />
-      <Hero />
+  <>
+  <Navbar />
+  <Hero />
 
-      <EventList
-        events={events}
-        featuredEvent={featuredEvent}
-        loading={loading}
-        error={error}
-        onRetry={retryEvents}
-        onRegister={handleRegister}
-        onCancelRegistration={handleCancelRegistration}
-        registeredEventIds={registeredEventIds}
-        registrationStatuses={registrationStatuses}
-        registeringEventIds={registeringEventIds}
-      />
-      <PastEvents />
+  <EventList
+    events={events}
+    featuredEvent={featuredEvent}
+    loading={loading}
+    error={error}
+    onRetry={retryEvents}
+    onRegister={handleRegister}
+    onCancelRegistration={handleCancelRegistration}
+    registeredEventIds={registeredEventIds}
+    registrationStatuses={registrationStatuses}
+    registeringEventIds={registeringEventIds}
+  />
 
-    </>
+  <PastEvents />
+  <RecruitmentSection />
+</>
   );
 }
 

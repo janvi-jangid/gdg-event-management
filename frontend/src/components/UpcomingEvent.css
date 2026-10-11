@@ -231,3 +231,21 @@
   }
 }
 
+.recruitment-section {
+  width: 100%;
+  padding-top: 20px;
+  padding-bottom: 35px;
+}
+
+.recruitment-section-title {
+  width: 90%;
+  max-width: 1600px;
+  margin: 0 auto 25px;
+  font-size: clamp(32px, 4vw, 56px);
+  font-weight: 900;
+  color: #080808;
+}
+
+.recruitment-section .upcoming-layout {
+  padding-top: 0;
+}
