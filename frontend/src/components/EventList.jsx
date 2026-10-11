@@ -2,7 +2,6 @@ import { useState } from "react";
 import EventCard from "./EventCard";
 import UpcomingEvent from "./UpcomingEvent";
 import "./EventList.css";
-import { image } from "framer-motion/client";
 
 const fallbackEvents = [
   {
