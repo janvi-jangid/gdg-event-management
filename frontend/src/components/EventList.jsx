@@ -2,12 +2,14 @@ import { useState } from "react";
 import EventCard from "./EventCard";
 import UpcomingEvent from "./UpcomingEvent";
 import "./EventList.css";
+import { image } from "framer-motion/client";
 
 const fallbackEvents = [
   {
     id: "preview-workshop",
     title: "Web Development Workshop",
     category: "Web Development",
+    image: "/Card1.jpg",
     description:
       "Learn HTML, CSS, JavaScript, and modern web development through practical activities.",
     dateTime: null,
@@ -19,6 +21,7 @@ const fallbackEvents = [
     id: "preview-competition",
     title: "Coding Competition",
     category: "Competitive Programming",
+    image:"/Card2.avif",
     description:
       "Test your problem-solving skills and challenge yourself with coding problems.",
     dateTime: null,
@@ -30,6 +33,7 @@ const fallbackEvents = [
     id: "preview-career",
     title: "Career Guidance Session",
     category: "Career Development",
+    image: "/Card3.avif",
     description:
       "Explore career paths, placement preparation, and opportunities in technology.",
     dateTime: null,
@@ -92,6 +96,7 @@ function EventList({
 
     return matchesSearch && matchesCategory;
   });
+  
 
   return (
     <section id="events" className="events-section">
