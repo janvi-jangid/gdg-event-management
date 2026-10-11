@@ -148,13 +148,13 @@ function RecruitmentSection({
           <button
             type="button"
             className="new-event-register"
-            disabled={loading || unavailable || (!registered && registrationClosed) || registering}
+            disabled={loading || registrationClosed || registering || registered}
             onClick={registered ? () => onCancelRegistration(event.id) : openForm}
           >
             {loading
               ? "Loading event..."
               : unavailable
-                ? "Registration unavailable"
+                ? "Register Now"
                 : registering
                   ? "Please wait..."
                   : registered
@@ -200,10 +200,6 @@ function RecruitmentSection({
             {registered ? (
               <p className="recruitment-registration-feedback" role="status">
                 You are registered for this event.
-              </p>
-            ) : unavailable ? (
-              <p className="recruitment-registration-feedback" role="alert">
-                Registration is unavailable because the event could not be loaded.
               </p>
             ) : registrationClosed ? (
               <p className="recruitment-registration-feedback" role="alert">
@@ -312,7 +308,9 @@ function RecruitmentSection({
         </div>
       )}
 
-      <style>{`
+      <style>
+        {`
+
         .recruitment-registration-overlay {
           position: fixed;
           inset: 0;
@@ -333,7 +331,9 @@ function RecruitmentSection({
           border-radius: 24px;
           background: #fff;
           color: #080808;
-          box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+          box-shadow:
+  0 25px 60px rgba(0, 0, 0, 0.25),
+  0 8px 20px rgba(0, 0, 0, 0.08);
         }
         .recruitment-registration-close {
           position: absolute;
@@ -367,18 +367,29 @@ function RecruitmentSection({
           font-size: 14px;
           font-weight: 700;
         }
-        .recruitment-registration-form input,
-        .recruitment-registration-form select {
-          box-sizing: border-box;
-          width: 100%;
-          min-height: 46px;
-          padding: 10px 12px;
-          border: 1px solid #c8c8c8;
-          border-radius: 10px;
-          background: #fff;
-          color: #111;
-          font: inherit;
-        }
+        
+.recruitment-registration-form input,
+.recruitment-registration-form select {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 12px;
+  border: 1px solid #d5d5d5;
+  border-radius: 12px;
+  background: #fff;
+  color: #111;
+  font: inherit;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.recruitment-registration-form input:focus,
+.recruitment-registration-form select:focus {
+  outline: none;
+  border-color: #777;
+  box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.07);
+}
+
         .recruitment-registration-form input[aria-invalid="true"],
         .recruitment-registration-form select[aria-invalid="true"] {
           border-color: #c62828;
@@ -392,17 +403,30 @@ function RecruitmentSection({
         .recruitment-registration-feedback {
           margin: 0;
         }
-        .recruitment-registration-submit {
-          grid-column: 1 / -1;
-          min-height: 48px;
-          border: 2px solid #000;
-          border-radius: 28px;
-          background: #000;
-          color: #fff;
-          font-size: 15px;
-          font-weight: 800;
-          cursor: pointer;
-        }
+        
+.recruitment-registration-submit {
+  grid-column: 1 / -1;
+  min-height: 50px;
+  border: 2px solid #000;
+  border-radius: 28px;
+  background: #111;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.recruitment-registration-submit:not(:disabled):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.24);
+}
+
+.recruitment-registration-submit:active {
+  transform: translateY(0);
+}
+
         .recruitment-registration-submit:disabled,
         .recruitment-registration-close:disabled {
           opacity: 0.6;
