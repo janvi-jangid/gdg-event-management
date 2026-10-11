@@ -141,8 +141,8 @@ function RecruitmentSection({
 
           <div className="new-event-date">
             <span>DATE &amp; TIME</span>
-            <strong>Oct 10, 2026</strong>
-            <strong>11:59 PM</strong>
+            <strong>Oct 15, 2026</strong>
+            <strong>2:00 PM</strong>
           </div>
 
           <button

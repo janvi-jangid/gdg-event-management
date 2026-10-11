@@ -127,7 +127,6 @@ function EventList({
         <>
           {usingFallback && (
             <p className="events-feedback">
-              Showing sample events. Live event data is currently unavailable.
             </p>
           )}
 
