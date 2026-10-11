@@ -22,7 +22,7 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    @Value("${CORS_ALLOWED_ORIGINS:http://localhost:5173}")
+    @Value("${CORS_ALLOWED_ORIGINS:http://localhost:5173,https://gdg-event-management-mu.vercel.app}")
     private String allowedOrigins;
 
     public SecurityConfig(
@@ -42,6 +42,10 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+
+                        // Allow browser CORS preflight without weakening API access.
+                        .requestMatchers(HttpMethod.OPTIONS, "/api/**")
+                        .permitAll()
 
                         // Public endpoints
                         .requestMatchers(
