@@ -42,10 +42,10 @@ public class AuthService {
     public String login(String email, String password) {
         AppUser user = userRepository.findByEmail(email)
                 .orElseThrow(() ->
-                        new BadCredentialsException("Invalid email or password"));
+                        new RuntimeException("Invalid email or password"));
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new BadCredentialsException("Invalid email or password");
+            throw new RuntimeException("Invalid email or password");
         }
 
         return jwtService.generateToken(user);

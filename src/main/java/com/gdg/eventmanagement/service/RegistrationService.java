@@ -4,6 +4,7 @@ package com.gdg.eventmanagement.service;
 import com.gdg.eventmanagement.entity.AppUser;
 import com.gdg.eventmanagement.entity.Event;
 import com.gdg.eventmanagement.entity.Registration;
+import com.gdg.eventmanagement.EventNotFoundException;
 import com.gdg.eventmanagement.repository.AppUserRepository;
 import com.gdg.eventmanagement.repository.EventRepository;
 import com.gdg.eventmanagement.repository.RegistrationRepository;
@@ -32,13 +33,22 @@ public class RegistrationService {
     @Transactional
     public Registration register(String email, Long eventId) {
 
+        if (eventId == null || eventId <= 0) {
+            throw new IllegalArgumentException("A valid event ID is required");
+        }
+
         AppUser user = userRepository.findByEmail(email)
                 .orElseThrow(() ->
                         new IllegalArgumentException("User not found"));
 
-        Event event = eventRepository.findById(eventId)
-                .orElseThrow(() ->
-                        new IllegalArgumentException("Event not found"));
+        Event event = eventRepository.findByIdForUpdate(eventId)
+                .orElseThrow(() -> new EventNotFoundException(eventId));
+
+        if (event.getDateTime() == null
+                || !event.getDateTime().isAfter(LocalDateTime.now())) {
+            throw new IllegalArgumentException(
+                    "Registration is closed for this event");
+        }
 
         if (registrationRepository.existsByUserIdAndEventId(
                 user.getId(), eventId)) {

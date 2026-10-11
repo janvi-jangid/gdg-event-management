@@ -33,6 +33,12 @@ public class EventController {
         return service.getEventById(id);
     }
 
+    @GetMapping("/{id}/availability")
+    public EventService.EventAvailability getRegistrationAvailability(
+            @PathVariable Long id) {
+        return service.getRegistrationAvailability(id);
+    }
+
     @PutMapping("/{id}")
     public Event updateEvent(
             @PathVariable Long id,

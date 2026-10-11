@@ -26,14 +26,14 @@ function EventCard({
             {event.category || "GDG RBU EVENT"}
           </span>
         </div>
-        {event.image && (
-          <img
-            src={event.image}
-            alt={event.title}
-            className="event-card-image"
-            onError={(e) => e.currentTarget.remove()}
-          />
-        )}
+        <img
+  src={event.image || "/Card1.jpg"}
+  alt={event.title || "Event"}
+  className="event-card-image"
+  onError={(e) => {
+    e.currentTarget.style.display = "none";
+  }}
+/>
         <span className="event-card-status">UPCOMING</span>
       </div>
 
@@ -80,35 +80,30 @@ function EventCard({
           </p>
         )}
         <button
-          className="event-register-button"
-          disabled={
-            previewMode ||
-            registering ||
-            (!registrationStatus?.registered && registrationStatus?.closed)
-            }
-          onClick={() => registrationStatus?.registered
-            ? onCancelRegistration(event.id)
-            : onRegister(event.id)}
-        >
-          {registering
-            ? "Please wait..."
-            : registrationStatus?.registered
-              ? "Cancel registration"
-              : registrationStatus?.closed
-                ? "Registration Closed"
-                : "Register Now"}
+  className="event-register-button"
+  disabled={
+    previewMode ||
+    registering ||
+    (!registrationStatus?.registered && registrationStatus?.closed)
+  }
+  onClick={() =>
+    registrationStatus?.registered
+      ? onCancelRegistration?.(event.id)
+      : onRegister?.(event.id)
+  }
+>
+  {previewMode
+    ? "Registration unavailable"
+    : registering
+      ? "Please wait..."
+      : registrationStatus?.registered
+        ? "Cancel registration"
+        : registrationStatus?.closed
+          ? "Registration Closed"
+          : "Register Now"}
 
-                {previewMode
-  ? "Registration unavailable"
-  : registering
-    ? "Please wait..."
-    : registrationStatus?.registered
-      ? "Cancel registration"
-      : registrationStatus?.closed
-        ? "Registration Closed"
-        : "Register Now"}
-          <span>→</span>
-        </button>
+  <span>→</span>
+</button>
       </div>
     </article>
   );

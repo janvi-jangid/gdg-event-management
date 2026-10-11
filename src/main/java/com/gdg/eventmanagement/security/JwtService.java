@@ -4,6 +4,7 @@
 import com.gdg.eventmanagement.entity.AppUser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -15,13 +16,7 @@ public class JwtService {
 
     private final SecretKey key;
 
-    public JwtService() {
-        String secret = System.getenv("JWT_SECRET");
-
-        if (secret == null || secret.isBlank()) {
-            secret = "EventHubLocalDevSecretKey2026MustBeAtLeast32BytesLong";
-        }
-
+    public JwtService(@Value("${jwt.secret}") String secret) {
         this.key = Keys.hmacShaKeyFor(
                 secret.getBytes(StandardCharsets.UTF_8)
         );

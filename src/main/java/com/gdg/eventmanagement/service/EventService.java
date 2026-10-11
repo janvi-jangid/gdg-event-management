@@ -4,6 +4,7 @@ package com.gdg.eventmanagement.service;
 import com.gdg.eventmanagement.EventNotFoundException;
 import com.gdg.eventmanagement.entity.Event;
 import com.gdg.eventmanagement.repository.EventRepository;
+import com.gdg.eventmanagement.repository.RegistrationRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,9 +13,13 @@ import java.util.List;
 public class EventService {
 
     private final EventRepository repository;
+    private final RegistrationRepository registrationRepository;
 
-    public EventService(EventRepository repository) {
+    public EventService(
+            EventRepository repository,
+            RegistrationRepository registrationRepository) {
         this.repository = repository;
+        this.registrationRepository = registrationRepository;
     }
 
     public Event createEvent(Event event) {
@@ -29,6 +34,25 @@ public class EventService {
         return repository.findById(id)
                 .orElseThrow(() -> new EventNotFoundException(id));
     }
+
+    public EventAvailability getRegistrationAvailability(Long id) {
+        Event event = getEventById(id);
+        long registeredCount = registrationRepository.countByEventId(id);
+        boolean closed = event.getCapacity() == null
+                || registeredCount >= event.getCapacity()
+                || event.getDateTime() == null
+                || !event.getDateTime().isAfter(java.time.LocalDateTime.now());
+
+        return new EventAvailability(
+                event.getId(), event.getCapacity(), registeredCount, closed);
+    }
+
+    public record EventAvailability(
+            Long eventId,
+            Integer capacity,
+            long registeredCount,
+            boolean closed
+    ) {}
 
     public Event updateEvent(Long id, Event updatedEvent) {
         Event event = repository.findById(id)
