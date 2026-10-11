@@ -290,7 +290,15 @@ function App() {
   />
 
   <PastEvents />
-  <RecruitmentSection />
+  <RecruitmentSection
+    event={featuredEvent}
+    loading={loading}
+    registrationStatus={featuredEvent ? registrationStatuses[featuredEvent.id] : null}
+    registered={featuredEvent ? registeredEventIds.has(featuredEvent.id) : false}
+    registering={featuredEvent ? registeringEventIds.has(featuredEvent.id) : false}
+    onRegister={handleRegister}
+    onCancelRegistration={handleCancelRegistration}
+  />
 </>
   );
 }
