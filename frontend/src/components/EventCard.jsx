@@ -7,50 +7,61 @@ function EventCard({
   onCancelRegistration,
   registrationStatus,
   registering,
+  previewMode = false,
 }) {
-  const eventDate = new Date(event.dateTime);
-const eventImages = {
-  Pixtopia: "/Pixtopia.png",
-  "Tech Sprint": "/TechSprint.png",
-  TechSprint: "/TechSprint.png",
-  "Google Cloud Study Jam": "/GoogleJam.png",
-  "Explore 2.0": "/Explore.png",
-};
-
+  const includesTimezone = /(?:Z|[+-]\d{2}:?\d{2})$/i.test(event.dateTime || "");
+  const eventDate = event.dateTime
+    ? new Date(includesTimezone ? event.dateTime : `${event.dateTime}+05:30`)
+    : null;
+  const dateIsValid = eventDate && !Number.isNaN(eventDate.getTime());
 
   return (
     <article className="event-card">
-<div className="event-card-banner">
-  {event.image && (
-  <img
-    src={event.image}
-    alt={event.title}
-    className="event-card-image"
-  />
-)}
-</div>
+      <div className="event-card-banner">
+        <div className="event-card-placeholder" aria-hidden="true">
+          <span className="event-card-placeholder-mark">
+            {event.category?.slice(0, 1).toUpperCase() || "✦"}
+          </span>
+          <span className="event-card-placeholder-label">
+            {event.category || "GDG RBU EVENT"}
+          </span>
+        </div>
+        {event.image && (
+          <img
+            src={event.image}
+            alt={event.title}
+            className="event-card-image"
+            onError={(e) => e.currentTarget.remove()}
+          />
+        )}
+        <span className="event-card-status">UPCOMING</span>
+      </div>
 
       <div className="event-card-content">
         <p className="event-card-date">
-          {eventDate.toLocaleDateString("en-IN", {
-            day: "numeric",
-            month: "short",
-            year: "numeric",
-          })}
-          {" · "}
-          {eventDate.toLocaleTimeString("en-IN", {
-            hour: "numeric",
-            minute: "2-digit",
-          })}
+          {dateIsValid
+            ? `${eventDate.toLocaleDateString("en-IN", {
+                day: "numeric",
+                month: "short",
+                year: "numeric",
+                timeZone: "Asia/Kolkata",
+              })} · ${eventDate.toLocaleTimeString("en-IN", {
+                hour: "numeric",
+                minute: "2-digit",
+                timeZone: "Asia/Kolkata",
+              })}`
+            : "Date to be announced"}
         </p>
 
-        <h3>{event.title}</h3>
+        <h3>{event.title || "Untitled event"}</h3>
 
-        <p className="event-description">{event.description}</p>
+        <p className="event-description">
+          {event.description || "More event details will be shared soon."}
+        </p>
 
         <div className="event-details">
-          <span>📍 {event.location}</span>
-          <span>Capacity: {event.capacity}</span>
+          {event.location && <span>📍 {event.location}</span>}
+          {event.capacity != null && <span>Capacity · {event.capacity}</span>}
         </div>
 
         {registrationStatus?.registered && (
@@ -70,7 +81,11 @@ const eventImages = {
         )}
         <button
           className="event-register-button"
-          disabled={registering || (!registrationStatus?.registered && registrationStatus?.closed)}
+          disabled={
+            previewMode ||
+            registering ||
+            (!registrationStatus?.registered && registrationStatus?.closed)
+            }
           onClick={() => registrationStatus?.registered
             ? onCancelRegistration(event.id)
             : onRegister(event.id)}
@@ -82,6 +97,16 @@ const eventImages = {
               : registrationStatus?.closed
                 ? "Registration Closed"
                 : "Register Now"}
+
+                {previewMode
+  ? "Registration unavailable"
+  : registering
+    ? "Please wait..."
+    : registrationStatus?.registered
+      ? "Cancel registration"
+      : registrationStatus?.closed
+        ? "Registration Closed"
+        : "Register Now"}
           <span>→</span>
         </button>
       </div>
